@@ -1,0 +1,61 @@
+﻿@page
+@model ServMon.Pages.SrvMon.Servers.IndexModel
+
+@{
+    ViewData["Title"] = "AmGPGU IT";
+}
+
+<h1 class="p-4">Servers</h1>
+
+<p>
+    <a class="btn btn-teal" asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Server[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Server[0].IpAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Server[0].ShortDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Server[0].Activity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Server[0].CurrentStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Server) {
+        <tr class=@(item.CurrentStatus == Models.ServerStatus.NotAvailable ? "not-available" : "")>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IpAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShortDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentStatus)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a> |
+                <a asp-page="./Index" asp-route-id="@item.Id" class=@(!item.Activity ? "disabled" : "")>Ping</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

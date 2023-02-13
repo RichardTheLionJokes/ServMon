@@ -1,0 +1,49 @@
+﻿@page
+@model ServMon.Pages.SrvMon.Events.IndexModel
+
+@{
+    ViewData["Title"] = "AmGPGU IT";
+}
+
+<h1 class="p-4">Events</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ServEvent[0].Server)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServEvent[0].DateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServEvent[0].Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServEvent[0].ServerStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ServEvent) {
+        <tr class=@(item.ServerStatus == Models.ServerStatus.NotAvailable ? "not-available" : "")>
+            <td>
+                @Html.DisplayFor(modelItem => item.Server.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServerStatus)
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

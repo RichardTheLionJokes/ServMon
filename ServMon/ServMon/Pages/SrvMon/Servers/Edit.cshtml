@@ -1,0 +1,54 @@
+﻿@page
+@model ServMon.Pages.SrvMon.Servers.EditModel
+
+@{
+    ViewData["Title"] = "AmGPGU IT";
+}
+
+<h4 class="p-4">Edit server</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Server.Id" />
+            <div class="form-group">
+                <label asp-for="Server.Name" class="control-label"></label>
+                <input asp-for="Server.Name" class="form-control" />
+                <span asp-validation-for="Server.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Server.IpAddress" class="control-label"></label>
+                <input asp-for="Server.IpAddress" class="form-control" />
+                <span asp-validation-for="Server.IpAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Server.Description" class="control-label"></label>
+                <input asp-for="Server.Description" class="form-control" />
+                <span asp-validation-for="Server.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Server.ShortDescription" class="control-label"></label>
+                <input asp-for="Server.ShortDescription" class="form-control" />
+                <span asp-validation-for="Server.ShortDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Server.Activity" /> @Html.DisplayNameFor(model => model.Server.Activity)
+                </label>
+            </div>
+            <input type="hidden" asp-for="Server.CurrentStatus" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

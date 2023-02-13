@@ -1,0 +1,40 @@
+﻿@page
+@model ServMon.Pages.SrvMon.Events.DetailsModel
+
+@{
+    ViewData["Title"] = "AmGPGU IT";
+}
+
+<div>
+    <h4 class="p-4">Details of event</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ServEvent.Server)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ServEvent.Server.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ServEvent.DateTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ServEvent.DateTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ServEvent.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ServEvent.Type)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ServEvent.ServerStatus)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ServEvent.ServerStatus)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
