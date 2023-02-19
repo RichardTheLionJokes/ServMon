@@ -33,7 +33,7 @@ namespace ServMon.Services.SrvMon
                                     {
                                         server.CurrentStatus = newStatus;
                                         ServEvent _event = new ServEvent();
-                                        _event.ServerId = server.Id;
+                                        _event.Server = server;
                                         _event.DateTime = DateTime.Now;
                                         _event.Type = ServEventType.StatusChanged;
                                         _event.ServerStatus = newStatus;
@@ -41,7 +41,7 @@ namespace ServMon.Services.SrvMon
 
                                         await _context.SaveChangesAsync();
 
-                                        msg.Append(server.Name + " изменил статус на " + newStatus.ToString() + " " + _event.DateTime.ToString()).AppendLine();
+                                        msg.AppendLine(server.Name + " изменил статус на " + newStatus.ToString() + " " + _event.DateTime.ToString());
                                     }
                                 }
                             }

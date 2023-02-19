@@ -38,6 +38,13 @@
                 </label>
             </div>
             <input type="hidden" asp-for="Server.CurrentStatus" />
+            @foreach (var item in Model.Users)
+            {
+                <input type="checkbox" name="selectedUsers" value="@item.Id"
+                   @(Model.Server.Users.Contains(item) ? "checked='checked'" : "") />
+                @item.Name
+                <br />
+            }
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

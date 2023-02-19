@@ -18,7 +18,7 @@ namespace ServMon.Pages.SrvMon.Servers
             _context = context;
         }
 
-      public Server Server { get; set; } = default!; 
+        public Server Server { get; set; } = default!; 
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,7 +27,7 @@ namespace ServMon.Pages.SrvMon.Servers
                 return NotFound();
             }
 
-            var server = await _context.Servers.FirstOrDefaultAsync(m => m.Id == id);
+            var server = await _context.Servers.Include(s => s.Users).FirstOrDefaultAsync(m => m.Id == id);
             if (server == null)
             {
                 return NotFound();

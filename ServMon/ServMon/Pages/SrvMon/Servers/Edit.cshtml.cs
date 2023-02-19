@@ -13,14 +13,15 @@ namespace ServMon.Pages.SrvMon.Servers
     public class EditModel : PageModel
     {
         private readonly ServMon.Models.ServMonContext _context;
+        public IList<User> Users { get; set; } = default!;
+
+        [BindProperty]
+        public Server Server { get; set; } = default!;
 
         public EditModel(ServMon.Models.ServMonContext context)
         {
             _context = context;
         }
-
-        [BindProperty]
-        public Server Server { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,25 +30,43 @@ namespace ServMon.Pages.SrvMon.Servers
                 return NotFound();
             }
 
-            var server =  await _context.Servers.FirstOrDefaultAsync(m => m.Id == id);
+            var server = await _context.Servers.Include(s => s.Users).FirstOrDefaultAsync(m => m.Id == id);
             if (server == null)
             {
                 return NotFound();
             }
             Server = server;
+
+            var users = _context.Users.ToList();
+            if (users == null)
+            {
+                return NotFound();
+            }
+            Users = users;
+
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int[] selectedUsers)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Server).State = EntityState.Modified;
+            //_context.Attach(Server).State = EntityState.Modified;
+            _context.Attach(Server).Collection(u => u.Users).Load();
+            Server.Users.Clear();
+            if (selectedUsers != null)
+            {
+                foreach (var user in _context.Users.Where(u => selectedUsers.Contains(u.Id)))
+                {
+                    Server.Users.Add(user);
+                }
+            }
+            _context.Entry(Server).State = EntityState.Modified;
 
             try
             {

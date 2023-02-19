@@ -46,7 +46,7 @@ namespace ServMon.Pages.SrvMon.Servers
                         {
                             server.CurrentStatus = newStatus;
                             ServEvent _event = new ServEvent();
-                            _event.ServerId = server.Id;
+                            _event.Server = server;
                             _event.DateTime = DateTime.Now;
                             _event.Type = ServEventType.StatusChanged;
                             _event.ServerStatus = newStatus;

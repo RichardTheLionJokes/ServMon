@@ -37,9 +37,17 @@
                 <input asp-for="User.Phone" class="form-control" />
                 <span asp-validation-for="User.Phone" class="text-danger"></span>
             </div>
+            @foreach (var item in Model.Servers)
+            {
+                <input type="checkbox" name="selectedServers" value="@item.Id"
+                   @(Model.User.Servers.Contains(item) ? "checked='checked'" : "") />
+                @item.Name
+                <br />
+            }
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
+            
         </form>
     </div>
 </div>

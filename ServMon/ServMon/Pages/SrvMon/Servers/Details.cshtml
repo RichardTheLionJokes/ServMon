@@ -45,6 +45,16 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Server.CurrentStatus)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Server.Users)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var item in Model.Server.Users)
+            {
+                @Html.DisplayFor(modelItem => item.Name)
+                <br />
+            }
+        </dd>
     </dl>
 </div>
 <div>

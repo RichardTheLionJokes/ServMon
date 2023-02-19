@@ -36,6 +36,12 @@
                     <input class="form-check-input" asp-for="Server.Activity" /> @Html.DisplayNameFor(model => model.Server.Activity)
                 </label>
             </div>
+            @foreach (var item in Model.Users)
+            {
+                <input type="checkbox" name="selectedUsers" value="@item.Id" />
+                @item.Name
+                <br />
+            }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-teal" />
             </div>

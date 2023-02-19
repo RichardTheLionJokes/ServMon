@@ -12,13 +12,13 @@ namespace ServMon.Pages.SrvMon.Users
     public class DetailsModel : PageModel
     {
         private readonly ServMon.Models.ServMonContext _context;
+        public User User { get; set; } = default!;
+        public IList<Server> Servers { get; set; } = default!;
 
         public DetailsModel(ServMon.Models.ServMonContext context)
         {
             _context = context;
         }
-
-      public User User { get; set; } = default!; 
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,7 +27,7 @@ namespace ServMon.Pages.SrvMon.Users
                 return NotFound();
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _context.Users.Include(u => u.Servers).FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
                 return NotFound();

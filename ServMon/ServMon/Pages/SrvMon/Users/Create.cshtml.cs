@@ -12,6 +12,10 @@ namespace ServMon.Pages.SrvMon.Users
     public class CreateModel : PageModel
     {
         private readonly ServMon.Models.ServMonContext _context;
+        public IList<Server> Servers { get; set; } = default!;
+
+        [BindProperty]
+        public User User { get; set; } = default!;
 
         public CreateModel(ServMon.Models.ServMonContext context)
         {
@@ -20,12 +24,15 @@ namespace ServMon.Pages.SrvMon.Users
 
         public IActionResult OnGet()
         {
+            var servers = _context.Servers.ToList();
+            if (servers == null)
+            {
+                return NotFound();
+            }
+            Servers = servers;
+
             return Page();
         }
-
-        [BindProperty]
-        public User User { get; set; } = default!;
-        
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
