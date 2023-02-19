@@ -29,9 +29,10 @@ namespace ServMon.Pages.SrvMon.Servers
             if (_context.Servers == null) return;
             else Server = await _context.Servers.ToListAsync();
 
+            // проверка статуса сервера
             if (id != null)
             {
-                var server = await _context.Servers.FirstOrDefaultAsync(m => m.Id == id);
+                var server = await _context.Servers.Include(s => s.Users).FirstOrDefaultAsync(m => m.Id == id);
                 if (server == null)
                 {
                     return;
@@ -54,12 +55,11 @@ namespace ServMon.Pages.SrvMon.Servers
 
                             await _context.SaveChangesAsync();
 
-                            string msg = server.Name + " изменил статус на " + newStatus.ToString() + " " + _event.DateTime.ToString();
-                            if (_context.Users != null)
+                            if (server.Users.Count > 0)
                             {
-                                var users = await _context.Users.Where(u => !System.String.IsNullOrEmpty(u.Email)).ToListAsync();
+                                string msg = "<b>" + server.Name + "</b> изменил статус на <b>" + newStatus.ToString() + "</b> " + _event.DateTime.ToString();
                                 List<MailboxAddress> receivers = new List<MailboxAddress>();
-                                foreach (User user in users)
+                                foreach (User user in server.Users)
                                 {
                                     receivers.Add(new MailboxAddress("", user.Email));
                                 }
@@ -71,6 +71,7 @@ namespace ServMon.Pages.SrvMon.Servers
 
                 RedirectToPage("./Index");
             }
+            // конец проверки статуса сервера
         }
     }
 }

@@ -15,7 +15,7 @@ Config.ConnectionString = connection;
 
 builder.Services.AddRazorPages();
 
-//builder.Services.AddHostedService<SrvScanner>();
+builder.Services.AddHostedService<SrvScanner>();
 
 var app = builder.Build();
 

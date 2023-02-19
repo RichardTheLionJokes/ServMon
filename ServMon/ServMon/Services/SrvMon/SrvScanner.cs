@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using ServMon.Models;
+using ServMon.Pages.SrvMon.Users;
 using System.Text;
 
 namespace ServMon.Services.SrvMon
@@ -20,10 +21,10 @@ namespace ServMon.Services.SrvMon
                     {
                         if (_context.Servers != null)
                         {
-                            var msg = new StringBuilder();
+                            Dictionary<string, StringBuilder> msgs = new Dictionary<string, StringBuilder>();
 
-                            IList<Server> Server = await _context.Servers.Where(s => s.Activity).ToListAsync();
-                            foreach (Server server in Server)
+                            IList<Server> Servers = await _context.Servers.Include(s => s.Users).Where(s => s.Activity).ToListAsync();
+                            foreach (Server server in Servers)
                             {
                                 if (!System.String.IsNullOrEmpty(server.Name))
                                 {
@@ -41,20 +42,27 @@ namespace ServMon.Services.SrvMon
 
                                         await _context.SaveChangesAsync();
 
-                                        msg.AppendLine(server.Name + " изменил статус на " + newStatus.ToString() + " " + _event.DateTime.ToString());
+                                        foreach (User user in server.Users)
+                                        {
+                                            if (msgs.ContainsKey(user.Email))
+                                            {
+                                                msgs[user.Email] = msgs[user.Email].Append("<li><b>" + server.Name + "</b> изменил статус на <b>" + newStatus.ToString() + "</b> " + _event.DateTime.ToString() + "</li>");
+                                            }
+                                            else
+                                            {
+                                                var msg = new StringBuilder("<ul><li><b>" + server.Name + "</b> изменил статус на <b>" + newStatus.ToString() + "</b> " + _event.DateTime.ToString() + "</li>");
+                                                msgs.Add(user.Email, msg);
+                                            }
+                                        }
                                     }
                                 }
                             }
 
-                            if (msg.Length > 0 && _context.Users != null)
+                            foreach (var msg in msgs)
                             {
-                                var users = await _context.Users.Where(u => !System.String.IsNullOrEmpty(u.Email)).ToListAsync();
-                                List<MailboxAddress> receivers = new List<MailboxAddress>();
-                                foreach (User user in users)
-                                {
-                                    receivers.Add(new MailboxAddress("", user.Email));
-                                }
-                                await Email.SendMail(receivers, "Изменения статусов серверов", msg.ToString());
+                                msg.Value.Append("</ul>");
+                                List<MailboxAddress> receivers = new List<MailboxAddress>() { new MailboxAddress("", msg.Key) };
+                                await Email.SendMail(receivers, "Изменения статусов серверов", msg.Value.ToString());
                             }
                         }
                     }
@@ -65,7 +73,7 @@ namespace ServMon.Services.SrvMon
                     Console.WriteLine(ex);
                 }
 
-                await Task.Delay(300000, stoppingToken);
+                await Task.Delay(5*60000, stoppingToken);
             }
         }
     }
