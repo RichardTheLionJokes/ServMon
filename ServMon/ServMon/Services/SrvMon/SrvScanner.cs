@@ -26,9 +26,9 @@ namespace ServMon.Services.SrvMon
                             IList<Server> Servers = await _context.Servers.Include(s => s.Users).Where(s => s.Activity).ToListAsync();
                             foreach (Server server in Servers)
                             {
-                                if (!System.String.IsNullOrEmpty(server.Name))
+                                if (!string.IsNullOrEmpty(server.Name) || !string.IsNullOrEmpty(server.IpAddress))
                                 {
-                                    bool online = await Task.Run(() => SrvMethods.AddressIsAvailable(server.Name, 5000));
+                                    bool online = await Task.Run(() => SrvMethods.AddressIsAvailable(server.Name, server.IpAddress, 5000));
                                     ServerStatus newStatus = online ? ServerStatus.Available : ServerStatus.NotAvailable;
                                     if (server.CurrentStatus != newStatus)
                                     {

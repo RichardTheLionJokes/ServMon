@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "AmGPGU IT";
+    string name;
 }
 
 <h1 class="p-4">Events</h1>
@@ -29,7 +30,10 @@
 @foreach (var item in Model.ServEvent) {
         <tr class=@(item.ServerStatus == Models.ServerStatus.NotAvailable ? "not-available" : "")>
             <td>
-                @Html.DisplayFor(modelItem => item.Server.Name)
+                @{
+                    name = !string.IsNullOrEmpty(item.Server.Name) ? item.Server.Name : item.Server.IpAddress;
+                }
+                @Html.DisplayFor(modelItem => name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateTime)

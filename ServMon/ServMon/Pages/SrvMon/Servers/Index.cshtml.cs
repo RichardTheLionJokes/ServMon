@@ -39,9 +39,9 @@ namespace ServMon.Pages.SrvMon.Servers
                 }
                 else
                 {
-                    if (!System.String.IsNullOrEmpty(server.Name))
+                    if (!string.IsNullOrEmpty(server.Name) || !string.IsNullOrEmpty(server.IpAddress))
                     {
-                        bool online = SrvMethods.AddressIsAvailable(server.Name, 1000);
+                        bool online = SrvMethods.AddressIsAvailable(server.Name, server.IpAddress, 1000);
                         ServerStatus newStatus = online ? ServerStatus.Available : ServerStatus.NotAvailable;
                         if (server.CurrentStatus != newStatus)
                         {
