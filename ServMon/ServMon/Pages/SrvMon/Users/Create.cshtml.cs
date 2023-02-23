@@ -13,6 +13,7 @@ namespace ServMon.Pages.SrvMon.Users
     {
         private readonly ServMon.Models.ServMonContext _context;
         public IList<Server> Servers { get; set; } = default!;
+        public string errorMessage = "";
 
         [BindProperty]
         public User User { get; set; } = default!;
@@ -35,11 +36,38 @@ namespace ServMon.Pages.SrvMon.Users
         }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int[] selectedServers)
         {
-          if (!ModelState.IsValid || _context.Users == null || User == null)
+
+            if (_context.Servers != null)
+            {
+                Servers = _context.Servers.ToList();
+            }
+
+            if (!ModelState.IsValid || _context.Users == null || User == null)
             {
                 return Page();
+            }
+
+            if (string.IsNullOrEmpty(User.Name) || string.IsNullOrEmpty(User.Email))
+            {
+                if (string.IsNullOrEmpty(User.Name))
+                {
+                    errorMessage = "Name must be filled!";
+                }
+                if (string.IsNullOrEmpty(User.Email))
+                {
+                    errorMessage = (string.IsNullOrEmpty(errorMessage) ? "" : errorMessage + " ") + "Email must be filled!";
+                }
+                return Page();
+            }
+
+            if (selectedServers != null && selectedServers.Length > 0)
+            {
+                foreach (var serv in _context.Servers.Where(s => selectedServers.Contains(s.Id)))
+                {
+                    User.Servers.Add(serv);
+                }
             }
 
             _context.Users.Add(User);

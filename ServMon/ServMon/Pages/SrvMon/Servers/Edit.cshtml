@@ -9,6 +9,13 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @if (Model.errorMessage.Length > 0)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>@Model.errorMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Server.Id" />
@@ -41,12 +48,15 @@
             <div class="form-group">
                 @Html.DisplayNameFor(model => model.Users)
                 <div class="border border-2" style="padding: 1em">
-                    @foreach (var item in Model.Users)
+                    @if (Model.Users != null)
                     {
-                        <input type="checkbox" name="selectedServers" value="@item.Id"
+                        @foreach (var item in Model.Users)
+                        {
+                            <input type="checkbox" name="selectedUsers" value="@item.Id"
                            @(Model.Server.Users.Contains(item) ? "checked='checked'" : "") />
-                        @item.Name
-                        <br />
+                            @item.Name
+                            <br />
+                        }
                     }
                 </div>
             </div>

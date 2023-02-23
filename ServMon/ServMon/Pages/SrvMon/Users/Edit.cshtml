@@ -3,12 +3,20 @@
 
 @{
     ViewData["Title"] = "AmGPGU IT";
+    string servName;
 }
 
 <h4 class="p-4">Edit user</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @if (Model.errorMessage.Length > 0)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>@Model.errorMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="User.Id" />
@@ -40,12 +48,16 @@
             <div class="form-group">
                 @Html.DisplayNameFor(model => model.Servers)
                 <div class="border border-2" style="padding: 1em">
-                    @foreach (var item in Model.Servers)
+                    @if (Model.Servers != null)
                     {
-                        <input type="checkbox" name="selectedServers" value="@item.Id"
+                        @foreach (var item in Model.Servers)
+                        {
+                            <input type="checkbox" name="selectedServers" value="@item.Id"
                            @(Model.User.Servers.Contains(item) ? "checked='checked'" : "") />
-                        @item.Name
-                        <br />
+                            servName = !string.IsNullOrEmpty(item.Name) ? item.Name : item.IpAddress;
+                            @Html.DisplayFor(modelItem => servName)
+                            <br />
+                        }
                     }
                 </div>
             </div>

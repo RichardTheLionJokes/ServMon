@@ -41,7 +41,8 @@ namespace ServMon.Pages.SrvMon.Servers
                 {
                     if (!string.IsNullOrEmpty(server.Name) || !string.IsNullOrEmpty(server.IpAddress))
                     {
-                        bool online = SrvMethods.AddressIsAvailable(server.Name, server.IpAddress, 1000);
+                        string address = !string.IsNullOrEmpty(server.Name) ? server.Name : server.IpAddress;
+                        bool online = SrvMethods.AddressIsAvailable(address, 1000);
                         ServerStatus newStatus = online ? ServerStatus.Available : ServerStatus.NotAvailable;
                         if (server.CurrentStatus != newStatus)
                         {
@@ -57,7 +58,7 @@ namespace ServMon.Pages.SrvMon.Servers
 
                             if (server.Users.Count > 0)
                             {
-                                string msg = "<b>" + server.Name + "</b> изменил статус на <b>" + newStatus.ToString() + "</b> " + _event.DateTime.ToString();
+                                string msg = "<b>" + address + "</b> изменил статус на <b>" + newStatus.ToString() + "</b> " + _event.DateTime.ToString();
                                 List<MailboxAddress> receivers = new List<MailboxAddress>();
                                 foreach (User user in server.Users)
                                 {

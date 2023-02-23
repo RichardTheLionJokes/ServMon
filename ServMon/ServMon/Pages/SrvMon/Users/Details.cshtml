@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "AmGPGU IT";
+    string servName;
 }
 
 <div>
@@ -45,7 +46,8 @@
         <dd class="col-sm-10">
             @foreach (var item in Model.User.Servers)
             {
-                @Html.DisplayFor(modelItem => item.Name)
+                servName = !string.IsNullOrEmpty(item.Name) ? item.Name : item.IpAddress;
+                @Html.DisplayFor(modelItem => servName)
                 <br />
             }
         </dd>

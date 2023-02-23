@@ -28,7 +28,8 @@ namespace ServMon.Services.SrvMon
                             {
                                 if (!string.IsNullOrEmpty(server.Name) || !string.IsNullOrEmpty(server.IpAddress))
                                 {
-                                    bool online = await Task.Run(() => SrvMethods.AddressIsAvailable(server.Name, server.IpAddress, 5000));
+                                    string address = !string.IsNullOrEmpty(server.Name) ? server.Name : server.IpAddress;
+                                    bool online = await Task.Run(() => SrvMethods.AddressIsAvailable(address, 5000));
                                     ServerStatus newStatus = online ? ServerStatus.Available : ServerStatus.NotAvailable;
                                     if (server.CurrentStatus != newStatus)
                                     {
@@ -44,14 +45,14 @@ namespace ServMon.Services.SrvMon
 
                                         foreach (User user in server.Users)
                                         {
+                                            string msg = "<li><b>" + address + "</b> изменил статус на <b>" + newStatus.ToString() + "</b> " + _event.DateTime.ToString() + "</li>";
                                             if (msgs.ContainsKey(user.Email))
                                             {
-                                                msgs[user.Email] = msgs[user.Email].Append("<li><b>" + server.Name + "</b> изменил статус на <b>" + newStatus.ToString() + "</b> " + _event.DateTime.ToString() + "</li>");
+                                                msgs[user.Email] = msgs[user.Email].Append(msg);
                                             }
                                             else
                                             {
-                                                var msg = new StringBuilder("<ul><li><b>" + server.Name + "</b> изменил статус на <b>" + newStatus.ToString() + "</b> " + _event.DateTime.ToString() + "</li>");
-                                                msgs.Add(user.Email, msg);
+                                                msgs.Add(user.Email, new StringBuilder("<ul>" + msg));
                                             }
                                         }
                                     }

@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "AmGPGU IT";
-    string name;
+    string servName;
 }
 
 <h1 class="p-4">Events</h1>
@@ -31,9 +31,9 @@
         <tr class=@(item.ServerStatus == Models.ServerStatus.NotAvailable ? "not-available" : "")>
             <td>
                 @{
-                    name = !string.IsNullOrEmpty(item.Server.Name) ? item.Server.Name : item.Server.IpAddress;
+                    servName = !string.IsNullOrEmpty(item.Server.Name) ? item.Server.Name : item.Server.IpAddress;
                 }
-                @Html.DisplayFor(modelItem => name)
+                @Html.DisplayFor(modelItem => servName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateTime)
