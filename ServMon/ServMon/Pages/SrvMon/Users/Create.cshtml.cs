@@ -25,12 +25,9 @@ namespace ServMon.Pages.SrvMon.Users
 
         public IActionResult OnGet()
         {
-            var servers = _context.Servers.ToList();
-            if (servers == null)
-            {
-                return NotFound();
-            }
-            Servers = servers;
+            if (_context.Servers == null) return NotFound();
+
+            Servers = _context.Servers.ToList(); ;
 
             return Page();
         }
@@ -39,10 +36,7 @@ namespace ServMon.Pages.SrvMon.Users
         public async Task<IActionResult> OnPostAsync(int[] selectedServers)
         {
 
-            if (_context.Servers != null)
-            {
-                Servers = _context.Servers.ToList();
-            }
+            Servers = _context.Servers.ToList();
 
             if (!ModelState.IsValid || _context.Users == null || User == null)
             {

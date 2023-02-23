@@ -25,10 +25,9 @@ namespace ServMon.Pages.SrvMon.Servers
 
         public IActionResult OnGet()
         {
-            if (_context.Users != null)
-            {
-                Users = _context.Users.ToList();
-            }
+            if (_context.Users == null) return NotFound();
+
+            Users = _context.Users.ToList();
 
             return Page();
         }
@@ -36,10 +35,7 @@ namespace ServMon.Pages.SrvMon.Servers
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync(int[] selectedUsers)
         {
-            if (_context.Users != null)
-            {
-                Users = _context.Users.ToList();
-            }
+            Users = _context.Users.ToList();
 
             if (!ModelState.IsValid || _context.Servers == null || Server == null)
             {

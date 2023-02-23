@@ -26,7 +26,7 @@ namespace ServMon.Pages.SrvMon.Servers
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Servers == null)
+            if (id == null || _context.Servers == null || _context.Users == null)
             {
                 return NotFound();
             }
@@ -38,10 +38,7 @@ namespace ServMon.Pages.SrvMon.Servers
             }
             Server = server;
 
-            if (_context.Users != null)
-            {
-                Users = _context.Users.ToList();
-            }
+            Users = _context.Users.ToList();
 
             return Page();
         }
@@ -50,10 +47,7 @@ namespace ServMon.Pages.SrvMon.Servers
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(int[] selectedUsers)
         {
-            if (_context.Users != null)
-            {
-                Users = _context.Users.ToList();
-            }
+            Users = _context.Users.ToList();
 
             if (!ModelState.IsValid)
             {
