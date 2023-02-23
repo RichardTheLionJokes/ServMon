@@ -12,22 +12,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ServEvent[0].Server)
+                @Html.DisplayNameFor(model => model.servEventPList[0].Server)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ServEvent[0].DateTime)
+                @Html.DisplayNameFor(model => model.servEventPList[0].DateTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ServEvent[0].Type)
+                @Html.DisplayNameFor(model => model.servEventPList[0].Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ServEvent[0].ServerStatus)
+                @Html.DisplayNameFor(model => model.servEventPList[0].ServerStatus)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.ServEvent) {
+@foreach (var item in Model.servEventPList) {
         <tr class=@(item.ServerStatus == Models.ServerStatus.NotAvailable ? "not-available" : "")>
             <td>
                 @{
@@ -51,3 +51,26 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.servEventPList.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.servEventPList.HasNextPage ? "disabled" : "";
+    var decreaseDisabled = Model.servEventPList.PageSize == 10 ? "disabled" : "";
+}
+
+<div class="btn-group">
+    <a class="btn btn-teal @prevDisabled" href="/SrvMon/Events/Index?pageIndex=@(Model.servEventPList.PageIndex - 1)&pageSize=@(Model.servEventPList.PageSize)">
+        Previous
+    </a>
+    <a class="btn btn-teal @nextDisabled" href="/SrvMon/Events/Index?pageIndex=@(Model.servEventPList.PageIndex + 1)&pageSize=@(Model.servEventPList.PageSize)">
+        Next
+    </a>
+</div>
+<div class="btn-group">
+    <a class="btn btn-teal @decreaseDisabled" href="/SrvMon/Events/Index?pageIndex=1&pageSize=@(Model.servEventPList.PageSize - 10)">
+        -10
+    </a>
+    <a class="btn btn-teal" href="/SrvMon/Events/Index?pageIndex=1&pageSize=@(Model.servEventPList.PageSize + 10)">
+        +10
+    </a>
+</div>
