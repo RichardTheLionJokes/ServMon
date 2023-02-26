@@ -56,6 +56,7 @@
     var prevDisabled = !Model.servEventPList.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.servEventPList.HasNextPage ? "disabled" : "";
     var decreaseDisabled = Model.servEventPList.PageSize == 10 ? "disabled" : "";
+    var increaseDisabled = (Model.servEventPList.PageSize == 50 || Model.servEventPList.TotalPages == 1) ? "disabled" : "";
 }
 
 <div class="btn-group">
@@ -70,7 +71,7 @@
     <a class="btn btn-teal @decreaseDisabled" href="/SrvMon/Events/Index?pageIndex=1&pageSize=@(Model.servEventPList.PageSize - 10)">
         -10
     </a>
-    <a class="btn btn-teal" href="/SrvMon/Events/Index?pageIndex=1&pageSize=@(Model.servEventPList.PageSize + 10)">
+    <a class="btn btn-teal @increaseDisabled" href="/SrvMon/Events/Index?pageIndex=1&pageSize=@(Model.servEventPList.PageSize + 10)">
         +10
     </a>
 </div>

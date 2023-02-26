@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -16,21 +17,34 @@ namespace ServMon.Pages.SrvMon.Servers
     public class IndexModel : PageModel
     {
         private readonly ServMon.Models.ServMonContext _context;
+        public PaginatedList<Server>? serverPList { get; set; } = default!;
 
         public IndexModel(ServMon.Models.ServMonContext context)
         {
             _context = context;
         }
 
-        public IList<Server> Server { get;set; } = default!;
-
-        public async Task OnGetAsync(int? id)
+        public async Task OnGetAsync(int? pageIndex, int? pageSize, int? id)
         {
-            if (_context.Servers == null) return;
-            else Server = await _context.Servers.ToListAsync();
+            IQueryable<Server> Server;
+
+            if (_context.Servers != null)
+            {
+                Server = from s in _context.Servers
+                         select s;
+
+                try
+                {
+                    serverPList = await PaginatedList<Server>.CreateAsync(Server, pageIndex ?? 1, pageSize ?? 10);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
 
             // проверка статуса сервера
-            if (id != null)
+            if (id != null && _context.Servers != null && _context.Users != null)
             {
                 var server = await _context.Servers.Include(s => s.Users).FirstOrDefaultAsync(m => m.Id == id);
                 if (server == null)
@@ -69,8 +83,6 @@ namespace ServMon.Pages.SrvMon.Servers
                         }
                     }
                 }
-
-                RedirectToPage("./Index");
             }
             // конец проверки статуса сервера
         }

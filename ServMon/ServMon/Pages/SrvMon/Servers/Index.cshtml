@@ -14,25 +14,26 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Server[0].Name)
+                @Html.DisplayNameFor(model => model.serverPList[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Server[0].IpAddress)
+                @Html.DisplayNameFor(model => model.serverPList[0].IpAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Server[0].ShortDescription)
+                @Html.DisplayNameFor(model => model.serverPList[0].ShortDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Server[0].Activity)
+                @Html.DisplayNameFor(model => model.serverPList[0].Activity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Server[0].CurrentStatus)
+                @Html.DisplayNameFor(model => model.serverPList[0].CurrentStatus)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Server) {
+        @foreach (var item in Model.serverPList)
+        {
         <tr class=@(item.CurrentStatus == Models.ServerStatus.NotAvailable ? "not-available" : "")>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -53,9 +54,34 @@
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a> |
-                <a asp-page="./Index" asp-route-id="@item.Id" class=@(!item.Activity ? "disabled" : "")>Ping</a>
+                <a asp-page="./Index" asp-route-id="@item.Id" class=@(!item.Activity ? "disabled" : "")
+                asp-route-pageIndex="@Model.serverPList.PageIndex" asp-route-pageSize="@Model.serverPList.PageSize">Ping</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.serverPList.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.serverPList.HasNextPage ? "disabled" : "";
+    var decreaseDisabled = Model.serverPList.PageSize == 10 ? "disabled" : "";
+    var increaseDisabled = (Model.serverPList.PageSize == 50 || Model.serverPList.TotalPages == 1) ? "disabled" : "";
+}
+
+<div class="btn-group">
+    <a class="btn btn-teal @prevDisabled" href="/SrvMon/Servers/Index?pageIndex=@(Model.serverPList.PageIndex - 1)&pageSize=@(Model.serverPList.PageSize)">
+        Previous
+    </a>
+    <a class="btn btn-teal @nextDisabled" href="/SrvMon/Servers/Index?pageIndex=@(Model.serverPList.PageIndex + 1)&pageSize=@(Model.serverPList.PageSize)">
+        Next
+    </a>
+</div>
+<div class="btn-group">
+    <a class="btn btn-teal @decreaseDisabled" href="/SrvMon/Servers/Index?pageIndex=1&pageSize=@(Model.serverPList.PageSize - 10)">
+        -10
+    </a>
+    <a class="btn btn-teal @increaseDisabled" href="/SrvMon/Servers/Index?pageIndex=1&pageSize=@(Model.serverPList.PageSize + 10)">
+        +10
+    </a>
+</div>

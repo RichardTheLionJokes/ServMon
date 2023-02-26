@@ -14,25 +14,26 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Name)
+                @Html.DisplayNameFor(model => model.userPList[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].PrintName)
+                @Html.DisplayNameFor(model => model.userPList[0].PrintName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Position)
+                @Html.DisplayNameFor(model => model.userPList[0].Position)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Email)
+                @Html.DisplayNameFor(model => model.userPList[0].Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Phone)
+                @Html.DisplayNameFor(model => model.userPList[0].Phone)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.User) {
+        @foreach (var item in Model.userPList)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -58,3 +59,27 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.userPList.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.userPList.HasNextPage ? "disabled" : "";
+    var decreaseDisabled = Model.userPList.PageSize == 10 ? "disabled" : "";
+    var increaseDisabled = (Model.userPList.PageSize == 50 || Model.userPList.TotalPages == 1) ? "disabled" : "";
+}
+
+<div class="btn-group">
+    <a class="btn btn-teal @prevDisabled" href="/SrvMon/Users/Index?pageIndex=@(Model.userPList.PageIndex - 1)&pageSize=@(Model.userPList.PageSize)">
+        Previous
+    </a>
+    <a class="btn btn-teal @nextDisabled" href="/SrvMon/Users/Index?pageIndex=@(Model.userPList.PageIndex + 1)&pageSize=@(Model.userPList.PageSize)">
+        Next
+    </a>
+</div>
+<div class="btn-group">
+    <a class="btn btn-teal @decreaseDisabled" href="/SrvMon/Users/Index?pageIndex=1&pageSize=@(Model.userPList.PageSize - 10)">
+        -10
+    </a>
+    <a class="btn btn-teal @increaseDisabled" href="/SrvMon/Users/Index?pageIndex=1&pageSize=@(Model.userPList.PageSize + 10)">
+        +10
+    </a>
+</div>
