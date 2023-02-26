@@ -74,7 +74,7 @@ namespace ServMon.Services.SrvMon
                     Console.WriteLine(ex);
                 }
 
-                await Task.Delay(5*60000, stoppingToken);
+                await Task.Delay(Config.ServStatusCheckFreq*60000, stoppingToken);
             }
         }
     }
