@@ -59,12 +59,12 @@ namespace ServMon.Services.SrvMon
                                 }
                             }
 
-                            foreach (var msg in msgs)
+                            Parallel.ForEach(msgs, async msg =>
                             {
                                 msg.Value.Append("</ul>");
                                 List<MailboxAddress> receivers = new List<MailboxAddress>() { new MailboxAddress("", msg.Key) };
                                 await Email.SendMail(receivers, "Изменения статусов серверов", msg.Value.ToString());
-                            }
+                            });
                         }
                     }
                 }
