@@ -16,6 +16,7 @@ Config.ConnectionString = connection;
 builder.Services.AddRazorPages();
 
 builder.Services.AddHostedService<SrvScanner>();
+builder.Services.AddHostedService<TelegramBot>();
 
 var app = builder.Build();
 

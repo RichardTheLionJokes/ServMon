@@ -9,5 +9,6 @@
         public static string YandexLogin { get; set; }
         public static string YandexPass { get; set; }
         public static int ServStatusCheckFreq { get; set; }
+        public static string TelegramBotToken { get; set; }
     }
 }
